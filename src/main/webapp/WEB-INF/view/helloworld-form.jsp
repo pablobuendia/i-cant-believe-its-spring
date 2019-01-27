@@ -4,7 +4,7 @@
 	<title>Hello world - Input form</title>
 </head>
 
-	<form action="processForm" method="GET">
+	<form action="processFormTwo" method="GET">
 	
 		<input type="text" name="studentName"
 			placeholder="What's your name?"/>
