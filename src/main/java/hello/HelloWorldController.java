@@ -32,5 +32,12 @@ public class HelloWorldController {
 		model.addAttribute("message", result);
 		
 		return "helloworld";
+		
+	}
+
+	@RequestMapping("/easteregg") 
+	public String easterEgg() {
+		
+		return "easter-egg";
 	}
 }
