@@ -1,0 +1,1 @@
+Hello ${nickname}, how are you?
