@@ -29,7 +29,7 @@ public class RestControllerExample {
   @ResponseBody
   public HelloMessage getHelloMessage(@RequestBody User user) {
     HelloMessage helloMessage = new HelloMessage();
-    String name = user.getName();
+    String name = user.getFirstname();
     helloMessage.setMessage("Hello " + name + "! How are you doing?");
     helloMessage.setName(name);
     return helloMessage;

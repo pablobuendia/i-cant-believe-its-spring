@@ -1,7 +1,9 @@
 package com.pablo.repositories;
 
 import java.util.List;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,9 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public List<User> findByEmail(String email) {
-    return this.sessionFactory.getCurrentSession().createQuery("from User u where u.email = :email")
-        .setParameter("email", email).list();
+    Session session = this.sessionFactory.getCurrentSession();
+    Query<User> query = session.getNamedQuery("findByEmail");
+    query.setParameter("email", email);
+    return query.list();
   }
 }
