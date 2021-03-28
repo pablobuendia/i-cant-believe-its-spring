@@ -8,6 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+/**
+ * Repeatable annotation that is used to register extensions for the annotated test class or test
+ * method.
+ * 
+ * @author Pablo
+ *
+ */
 @ExtendWith(SpringExtension.class)
 public class UserServiceTests {
 
