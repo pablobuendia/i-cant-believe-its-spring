@@ -19,6 +19,11 @@ public class UserDAOImpl implements UserDAO {
   @Autowired
   private SessionFactory sessionFactory;
 
+  @Autowired
+  public UserDAOImpl(SessionFactory sessionFactory) {
+    this.sessionFactory = sessionFactory;
+  }
+
   /**
    * It uses namedQuery, which are static and more optimal than other query mechanisms
    */
@@ -48,7 +53,6 @@ public class UserDAOImpl implements UserDAO {
     // Create an instance of CriteriaQuery by calling the CriteriaBuilder createQuery() method
     CriteriaQuery<User> criteria = builder.createQuery(User.class);
 
-
     Root<User> root = criteria.from(User.class);
     criteria.select(root).where(builder.and(builder.equal(root.get("email"), email)),
         builder.equal(root.get("password"), password));
@@ -57,5 +61,13 @@ public class UserDAOImpl implements UserDAO {
     Query<User> query = session.createQuery(criteria);
 
     return query.getResultList();
+  }
+
+  @Override
+  public User save(User user) {
+    Session session = this.sessionFactory.openSession();
+    session.save(user);
+    session.close();
+    return user;
   }
 }
