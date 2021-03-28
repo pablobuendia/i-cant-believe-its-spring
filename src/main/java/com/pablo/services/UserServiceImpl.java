@@ -1,5 +1,6 @@
 package com.pablo.services;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,5 +27,13 @@ public class UserServiceImpl implements UserService {
     this.emailService.sendConfirmationEmail(userSaved);
 
     return userSaved;
+  }
+
+  public User doesUserExist(String email) throws UserNotFoundException {
+    List<User> users = (List<User>) userDAO.findByEmail(email);
+    if (users.size() == 0) {
+      throw new UserNotFoundException("User does not exist in the database.");
+    }
+    return users.get(0);
   }
 }

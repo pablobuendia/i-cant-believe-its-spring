@@ -7,4 +7,5 @@ public interface UserService {
 
   User save(User user);
 
+  User doesUserExist(String email) throws UserNotFoundException;
 }
