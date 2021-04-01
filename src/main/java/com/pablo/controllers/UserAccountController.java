@@ -1,15 +1,34 @@
 package com.pablo.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.pablo.domain.User;
+import com.pablo.helpers.ExecutionStatus;
+import com.pablo.services.UserService;
 
 @Controller
 @RequestMapping("/account/*")
 public class UserAccountController {
+
+  private UserService userService;
+
+  private final static Logger logger = LoggerFactory.getLogger(UserAccountController.class);
+
+  @Autowired
+  public UserAccountController(UserService userService) {
+    this.userService = userService;
+  }
 
   @RequestMapping
   public String login() {
@@ -25,6 +44,25 @@ public class UserAccountController {
   public String forgotpassword() {
     return "forgotpassword";
   }
+
+  @PostMapping(value = "/login/process", produces = MediaType.APPLICATION_JSON_VALUE)
+  public @ResponseBody ExecutionStatus processLogin(ModelMap model, @RequestBody User reqUser) {
+
+    User user = null;
+    try {
+      user = userService.isValidUser(reqUser.getEmail(), reqUser.getPassword());
+    } catch (UnmatchingUserCredentialsException ex) {
+      logger.debug(ex.getMessage(), ex);
+    }
+
+    if (user == null) {
+      return new ExecutionStatus("USER_LOGIN_UNSUCCESSFUL",
+          "Username or password is incorrect. Please try again!");
+    }
+
+    return new ExecutionStatus("USER_LOGIN_SUCCESSFUL", "Login Succesful!");
+  }
+
 
   /**
    * ModelAndView is a container object to hold both Model and View. With ModelAndView as a return
