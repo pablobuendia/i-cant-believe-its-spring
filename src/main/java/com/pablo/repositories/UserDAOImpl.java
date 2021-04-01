@@ -42,6 +42,7 @@ public class UserDAOImpl implements UserDAO {
    * @param password
    * @return
    */
+  @Override
   public List<User> findByEmailAndPassword(String email, String password) {
 
     // Create instance of Session from SessionFactory

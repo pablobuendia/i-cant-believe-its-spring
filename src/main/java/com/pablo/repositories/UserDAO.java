@@ -10,4 +10,6 @@ public interface UserDAO {
 
   User save(User user);
 
+  List<User> findByEmailAndPassword(String email, String password);
+
 }
