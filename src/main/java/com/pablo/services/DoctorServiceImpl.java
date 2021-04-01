@@ -6,6 +6,12 @@ import org.springframework.stereotype.Service;
 import com.pablo.domain.Doctor;
 import com.pablo.repositories.DoctorDAO;
 
+/**
+ * Implementation of the DoctorService
+ * 
+ * @author Pablo
+ *
+ */
 @Service
 public class DoctorServiceImpl implements DoctorService {
 

@@ -5,6 +5,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.pablo.domain.User;
 
+/**
+ * Implementation of the EmailService
+ * 
+ * @author Pablo
+ *
+ */
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class EmailServiceImpl implements EmailService {

@@ -8,6 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pablo.domain.User;
 import com.pablo.repositories.UserDAO;
 
+/**
+ * Implementation of the UserService
+ * 
+ * @author Pablo
+ *
+ */
 @Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserServiceImpl implements UserService {
