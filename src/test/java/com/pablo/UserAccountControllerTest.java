@@ -24,6 +24,12 @@ import com.pablo.domain.User;
 import com.pablo.helpers.ExecutionStatus;
 import com.pablo.services.UserService;
 
+/**
+ * Unit tests for controllers.
+ * 
+ * @author Pablo
+ *
+ */
 @ExtendWith(SpringExtension.class) // Integrates the Spring 5 Test Context framework with JUnit 5
 @Tag("Controller")
 public class UserAccountControllerTest {
