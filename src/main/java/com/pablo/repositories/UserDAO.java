@@ -12,4 +12,6 @@ public interface UserDAO {
 
   List<User> findByEmailAndPassword(String email, String password);
 
+  void update(User user);
+
 }
