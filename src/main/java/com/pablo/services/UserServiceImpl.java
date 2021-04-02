@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService {
     return userSaved;
   }
 
+  @Override
+  public void update(User user) {
+    userDAO.update(user);
+  }
+
   public User doesUserExist(String email) throws UserNotFoundException {
     List<User> users = (List<User>) userDAO.findByEmail(email);
     if (users.size() == 0) {

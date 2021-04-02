@@ -12,4 +12,6 @@ public interface UserService {
 
   User isValidUser(String email, String password) throws UnmatchingUserCredentialsException;
 
+  void update(User user);
+
 }
