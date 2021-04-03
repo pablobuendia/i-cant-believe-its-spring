@@ -1,4 +1,4 @@
-package com.pablo.controllers;
+package com.pablo.exceptions;
 
 public class UnmatchingUserCredentialsException extends Exception {
 

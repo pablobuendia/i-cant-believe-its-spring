@@ -1,4 +1,4 @@
-package com.pablo.services;
+package com.pablo.exceptions;
 
 public class UserNotFoundException extends Exception {
 
