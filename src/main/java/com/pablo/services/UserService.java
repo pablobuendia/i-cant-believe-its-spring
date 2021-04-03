@@ -1,7 +1,8 @@
 package com.pablo.services;
 
-import com.pablo.controllers.UnmatchingUserCredentialsException;
 import com.pablo.domain.User;
+import com.pablo.exceptions.UnmatchingUserCredentialsException;
+import com.pablo.exceptions.UserNotFoundException;
 
 
 public interface UserService {

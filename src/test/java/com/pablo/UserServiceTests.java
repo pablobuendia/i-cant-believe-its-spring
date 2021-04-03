@@ -18,9 +18,9 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.pablo.domain.User;
+import com.pablo.exceptions.UserNotFoundException;
 import com.pablo.repositories.UserDAO;
 import com.pablo.services.EmailService;
-import com.pablo.services.UserNotFoundException;
 import com.pablo.services.UserService;
 import com.pablo.services.UserServiceImpl;
 
