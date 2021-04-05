@@ -33,7 +33,7 @@ public class SignupInterceptor implements HandlerInterceptor {
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
       Object handler, Exception exception) throws Exception {
-
+    // Do nothing
   }
 
   /**
@@ -42,6 +42,6 @@ public class SignupInterceptor implements HandlerInterceptor {
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
       ModelAndView modelAndView) throws Exception {
-
+    // Do nothing
   }
 }
