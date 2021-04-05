@@ -46,13 +46,25 @@ public class UserAccountController {
     return "login";
   }
 
+  /**
+   * Template signup method
+   * 
+   * @return
+   */
   @GetMapping("/signup")
   public String signup() {
+    // TODO: Expand this section
     return "signup";
   }
 
+  /**
+   * Template method
+   * 
+   * @return
+   */
   @GetMapping("/forgotpassword")
   public String forgotpassword() {
+    // TODO: Expand this section
     return "forgotpassword";
   }
 

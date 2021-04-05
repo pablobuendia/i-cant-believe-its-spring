@@ -16,6 +16,13 @@ public class DoctorSearchController {
   @Autowired
   DoctorService docService;
 
+  /**
+   * Search for a list of doctors based on the Location and the specialty
+   * 
+   * @param location
+   * @param specialty
+   * @return
+   */
   @RequestMapping(value = "/doctors", method = RequestMethod.GET, produces = "application/json")
   public DoctorList searchDoctor(
       @RequestParam(value = "location", required = false) String location,
@@ -23,4 +30,5 @@ public class DoctorSearchController {
     List<Doctor> docList = docService.findByLocationAndSpecialty(location, specialty);
     return new DoctorList(docList);
   }
+
 }
