@@ -26,8 +26,7 @@ public class DoctorDAOImpl implements DoctorDAO {
     TypedQuery<Doctor> query = session.getNamedQuery("findByLocationAndSpecialty");
     query.setParameter("location", location);
     query.setParameter("specialty", specialty);
-    List<Doctor> doctors = query.getResultList();
-    return doctors;
+    return query.getResultList();
   }
 
 }
