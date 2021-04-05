@@ -34,7 +34,7 @@ public class UserAccountController {
 
   private UserService userService;
 
-  private final static Logger logger = LoggerFactory.getLogger(UserAccountController.class);
+  private static final Logger logger = LoggerFactory.getLogger(UserAccountController.class);
 
   @Autowired
   public UserAccountController(UserService userService) {
