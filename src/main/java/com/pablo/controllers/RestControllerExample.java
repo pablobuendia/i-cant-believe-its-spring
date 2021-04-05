@@ -13,7 +13,7 @@ import com.pablo.helpers.HelloMessage;
 public class RestControllerExample {
 
   @GetMapping("/rest")
-  String home() {
+  public String home() {
     return "Hello World. This is a health application";
   }
 
