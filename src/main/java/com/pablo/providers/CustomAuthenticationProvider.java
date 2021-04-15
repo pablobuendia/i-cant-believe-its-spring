@@ -13,6 +13,11 @@ import com.pablo.domain.User;
 import com.pablo.exceptions.UserNotFoundException;
 import com.pablo.services.UserService;
 
+/**
+ * 
+ * @author Pablo
+ *
+ */
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   @Autowired

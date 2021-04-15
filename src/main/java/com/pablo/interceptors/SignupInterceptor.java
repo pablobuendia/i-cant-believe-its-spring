@@ -6,6 +6,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import com.pablo.exceptions.UserNotFoundException;
 
 public class SignupInterceptor implements HandlerInterceptor {
 
@@ -21,7 +22,7 @@ public class SignupInterceptor implements HandlerInterceptor {
 
     if (ObjectUtils.isEmpty(emailAddress) || StringUtils.containsWhitespace(emailAddress)
         || ObjectUtils.isEmpty(password) || StringUtils.containsWhitespace(password)) {
-      throw new Exception("Invalid Email Address or Password. Please try again.");
+      throw new UserNotFoundException("Invalid Email Address or Password. Please try again.");
     }
 
     return true;
