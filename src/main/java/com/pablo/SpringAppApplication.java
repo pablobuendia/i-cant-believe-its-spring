@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@SpringBootApplication
+@SpringBootApplication // <-- Look it says Spring Boot, that's what I'm using! Isn't it nice?
 public class SpringAppApplication extends SpringBootServletInitializer {
 
   /**
