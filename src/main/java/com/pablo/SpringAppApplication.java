@@ -34,6 +34,8 @@ public class SpringAppApplication extends SpringBootServletInitializer {
    * (/{nickname}). Method that returns a simple index page that shows the nickname sent as a
    * parameter in the GET request.
    * 
+   * An example to show how the PathVariable annotation works.
+   * 
    * @param model
    * @param nickname
    * @return
