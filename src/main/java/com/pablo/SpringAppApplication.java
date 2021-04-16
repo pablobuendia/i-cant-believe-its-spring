@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SpringAppApplication extends SpringBootServletInitializer {
 
   /**
-   * "@RequestParam" is used to retrieve value of parameter, name
+   * This is the index and first page!!
    * 
-   * @param model
-   * @param nickname
-   * @return
+   * @param model The model
+   * @param nickname the nickname to show to the user
+   * @return The name of the page
    */
   @GetMapping("/")
   public String usingRequestParam(Model model,
