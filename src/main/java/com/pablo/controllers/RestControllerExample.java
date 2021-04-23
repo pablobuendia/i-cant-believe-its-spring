@@ -4,15 +4,17 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.pablo.domain.User;
 import com.pablo.helpers.HelloMessage;
 
 @RestController
+@RequestMapping("/rest")
 public class RestControllerExample {
 
-  @GetMapping("/rest")
+  @GetMapping("/example")
   public String home() {
     return "Hello World. This is a health application";
   }
