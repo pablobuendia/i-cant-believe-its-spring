@@ -2,12 +2,10 @@ package com.pablo.exceptions;
 
 public class UnmatchingUserCredentialsException extends Exception {
 
-  public UnmatchingUserCredentialsException(String message) {
-    super(message);
-  }
+	public UnmatchingUserCredentialsException(String message) {
+		super(message);
+	}
 
-  private static final long serialVersionUID = 8642432905908266045L;
-
-
+	private static final long serialVersionUID = 8642432905908266045L;
 
 }

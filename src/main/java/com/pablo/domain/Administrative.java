@@ -3,8 +3,11 @@ package com.pablo.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -12,47 +15,50 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Administrative {
 
-  @Id
-  @Column
-  private int id;
-  @Column(nullable = false, length = 100)
-  private String firstName;
-  @Column(nullable = false, length = 100)
-  private String lastName;
-  @Column
-  private int documentNumber;
+	@Id
+	@Column
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
+	@Column(nullable = false, length = 100)
+	private String firstName;
 
-  public int getId() {
-    return id;
-  }
+	@Column(nullable = false, length = 100)
+	private String lastName;
 
-  public void setId(int id) {
-    this.id = id;
-  }
+	@Column
+	private int documentNumber;
 
-  public String getFirstName() {
-    return firstName;
-  }
+	public int getId() {
+		return id;
+	}
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public String getFirstName() {
+		return firstName;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public int getDocumentNumber() {
-    return documentNumber;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public void setDocumentNumber(int documentNumber) {
-    this.documentNumber = documentNumber;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public int getDocumentNumber() {
+		return documentNumber;
+	}
+
+	public void setDocumentNumber(int documentNumber) {
+		this.documentNumber = documentNumber;
+	}
 
 }
