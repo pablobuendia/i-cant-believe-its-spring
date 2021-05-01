@@ -2,28 +2,32 @@ package com.pablo.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table
+@Table(name = "administrative")
+@EntityListeners(AuditingEntityListener.class)
 public class Administrative {
 
   @Id
   @Column
-  private String id;
-  @Column
+  private int id;
+  @Column(nullable = false, length = 100)
   private String firstName;
-  @Column
+  @Column(nullable = false, length = 100)
   private String lastName;
   @Column
-  private String documentNumber;
+  private int documentNumber;
 
-  public String getId() {
+
+  public int getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -43,13 +47,12 @@ public class Administrative {
     this.lastName = lastName;
   }
 
-  public String getDocumentNumber() {
+  public int getDocumentNumber() {
     return documentNumber;
   }
 
-  public void setDocumentNumber(String documentNumber) {
+  public void setDocumentNumber(int documentNumber) {
     this.documentNumber = documentNumber;
   }
-
 
 }
