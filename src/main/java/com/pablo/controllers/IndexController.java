@@ -20,7 +20,6 @@ public class IndexController {
 	@GetMapping("/")
 	public String usingRequestParam(Model model,
 			@RequestParam(value = "name", required = false) String nickname) {
-		model.addAttribute("nickname", nickname);
 		return "index"; // because of the suffix this will look up for the "index.jsp"
 						// file
 	}

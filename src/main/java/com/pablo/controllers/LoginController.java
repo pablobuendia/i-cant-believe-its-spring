@@ -18,4 +18,5 @@ public class LoginController extends UserAccountController {
 	public String login() {
 		return "login";
 	}
+
 }
