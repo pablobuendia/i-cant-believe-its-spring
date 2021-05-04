@@ -29,6 +29,9 @@ public class Administrative {
 	@Column
 	private int documentNumber;
 
+	@Column(length = 100)
+	private String description;
+
 	public int getId() {
 		return id;
 	}
