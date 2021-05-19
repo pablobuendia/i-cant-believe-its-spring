@@ -1,9 +1,23 @@
-# CRUD App: An app to show the stuff that people should know to do the programs that do stuff
+# incredible, unbelievable, superbly awesome, mediocre app (iu-sama)
 
-Example web app to show some examples of how the technologies invented by smarter people than me work together.
+A Spring app with a React front-end to show off a bit.
 
-For now it uses Spring as the main framework. Eventually I'll incoporate more stuff on it.
+## Description
 
-It uses Spring, possibly an Angular front an a lot of stolen code from books and stuff (not really stolen cause it's on public repositories).
+Basically, it's just a simple CRUD for now with a React front-end. I might add more stuff in the future.
 
-If you managed to read this part, congratulations, you truly have amazing concentration abilities.
+## Installation
+
+Skip this part. You probably won't need to know this (for now). It's just a Spring Boot project.
+
+## Usage
+
+Not much really.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change (and what the hell made you think contributing to this project was a good spend of your time).
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
