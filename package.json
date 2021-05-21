@@ -27,7 +27,9 @@
     "webpack-cli": "^4.7.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "webpack --watch -d eval-source-map --output-path ./target/classes/static/built/bundle.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
