@@ -15,9 +15,11 @@ Skip this part. You probably won't need to know this (for now). It's just a Spri
 Not much really.
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change (and what the hell made you think contributing to this project was a good spend of your time).
 
 Please make sure to update tests as appropriate.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
