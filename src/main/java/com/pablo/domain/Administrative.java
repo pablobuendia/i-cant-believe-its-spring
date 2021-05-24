@@ -1,5 +1,7 @@
 package com.pablo.domain;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -7,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -31,6 +34,27 @@ public class Administrative {
 
 	@Column(length = 100)
 	private String description;
+
+	@Version
+	private Long version; // It causes a value to be
+							// automatically stored and
+							// updated every time a row is
+							// inserted and updated.
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Administrative administrative = (Administrative) o;
+		return Objects.equals(id, administrative.id)
+				&& Objects.equals(firstName, administrative.firstName)
+				&& Objects.equals(lastName, administrative.lastName)
+				&& Objects.equals(documentNumber, administrative.documentNumber)
+				&& Objects.equals(description, administrative.description)
+				&& Objects.equals(version, administrative.version);
+	}
 
 	public int getId() {
 		return id;
@@ -62,6 +86,37 @@ public class Administrative {
 
 	public void setDocumentNumber(int documentNumber) {
 		this.documentNumber = documentNumber;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(id, firstName, lastName, documentNumber, description,
+				version);
+	}
+
+	@Override
+	public String toString() {
+		return "Employee{" + "id=" + id + ", firstName='" + firstName + '\''
+				+ ", lastName='" + lastName + '\'' + ", documentNumber='" + documentNumber
+				+ '\'' + ", description='" + description + '\'' + ", version=" + version
+				+ '}';
 	}
 
 }
