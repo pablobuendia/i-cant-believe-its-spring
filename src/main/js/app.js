@@ -23,9 +23,35 @@ class App extends React.Component { // <1>
 		this.onNavigate = this.onNavigate.bind(this);
 	}
 
-	componentDidMount() { // <2>
-		client({method: 'GET', path: '/api/administratives'}).done(response => {
-			this.setState({administratives: response.entity._embedded.administratives});
+	loadFromServer(pageSize) {
+		follow(client, root, [
+			{rel: 'administratives', params: {size: pageSize}}]
+		).then(administrativeCollection => { // It creates a call to fetch JSON Schema data.
+			return client({
+				method: 'GET',
+				path: administrativeCollection.entity._links.profile.href,
+				headers: {'Accept': 'application/schema+json'}
+			}).then(schema => { 
+				this.schema = schema.entity; // This has an inner then clause to store the metadata and navigational links in the <App/> component.
+				this.links = administrativeCollection.entity._links;
+				return administrativeCollection; // this embedded promise returns the administrativeCollection
+			});
+		}).then(administrativeCollection => { // The second then(administrativeCollection ⇒ …​) clause converts the collection of administratives into an array of GET promises to fetch each individual resource.
+			return administrativeCollection.entity._embedded.administratives.map(administrative =>
+					client({
+						method: 'GET',
+						path: administrative._links.self.href
+					})
+			);
+		}).then(administrativePromises => { // The then(administrativePromises ⇒ …​) clause takes the array of GET promises and merges them into a single promise with when.all()
+			return when.all(administrativePromises); // which is resolved when all the GET promises are resolved.
+		}).done(administratives => { // loadFromServer wraps up with done(administratives ⇒ …​) where the UI state is updated using this amalgamation of data.
+			this.setState({
+				administratives: administratives,
+				attributes: Object.keys(this.schema.properties),
+				pageSize: pageSize,
+				links: this.links
+			});
 		});
 	}
 
@@ -241,34 +267,125 @@ class UpdateDialog extends React.Component {
 
 // tag::administrative-list[]
 class AdministrativeList extends React.Component{
+
+	constructor(props) {
+		super(props);
+		this.handleNavFirst = this.handleNavFirst.bind(this);
+		this.handleNavPrev = this.handleNavPrev.bind(this);
+		this.handleNavNext = this.handleNavNext.bind(this);
+		this.handleNavLast = this.handleNavLast.bind(this);
+		this.handleInput = this.handleInput.bind(this);
+	}
+
+	// tag::handle-page-size-updates[]
+	handleInput(e) {
+		e.preventDefault();
+		const pageSize = ReactDOM.findDOMNode(this.refs.pageSize).value;
+		if (/^[0-9]+$/.test(pageSize)) {
+			this.props.updatePageSize(pageSize);
+		} else {
+			ReactDOM.findDOMNode(this.refs.pageSize).value =
+				pageSize.substring(0, pageSize.length - 1);
+		}
+	}
+	// end::handle-page-size-updates[]
+
+	// tag::handle-nav[]
+	handleNavFirst(e){
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.first.href);
+	}
+
+	handleNavPrev(e) {
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.prev.href);
+	}
+
+	handleNavNext(e) {
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.next.href);
+	}
+
+	handleNavLast(e) {
+		e.preventDefault();
+		this.props.onNavigate(this.props.links.last.href);
+	}
+	// end::handle-nav[]
+
+	// tag::administrative-list-render[]
 	render() {
 		const administratives = this.props.administratives.map(administrative =>
-			<Administrative key={administrative._links.self.href} administrative={administrative}/>
+			<Administrative key={administrative.entity._links.self.href} administrative={administrative} attributes={this.props.attributes}
+			onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
 		);
+
+		const navLinks = [];
+		if ("first" in this.props.links) {
+			navLinks.push(<button key="first" onClick={this.handleNavFirst}>&lt;&lt;</button>);
+		}
+		if ("prev" in this.props.links) {
+			navLinks.push(<button key="prev" onClick={this.handleNavPrev}>&lt;</button>);
+		}
+		if ("next" in this.props.links) {
+			navLinks.push(<button key="next" onClick={this.handleNavNext}>&gt;</button>);
+		}
+		if ("last" in this.props.links) {
+			navLinks.push(<button key="last" onClick={this.handleNavLast}>&gt;&gt;</button>);
+		}
+
 		return (
-			<table>
-				<tbody>
-					<tr>
-						<th>First Name</th>
-						<th>Last Name</th>
-						<th>Document Number</th>
-					</tr>
-					{administratives}
-				</tbody>
-			</table>
+			<div>
+				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
+				<table>
+					<tbody>
+						<tr>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Document Number</th>
+							<th>Description</th>
+							<th></th>
+							<th></th>
+						</tr>
+						{administratives}
+					</tbody>
+				</table>
+				<div>
+					{navLinks}
+				</div>
+			</div>
 		)
 	}
+	// end::administrative-list-render[]
 }
 // end::administrative-list[]
 
 // tag::administrative[]
 class Administrative extends React.Component{
+
+	constructor(props) {
+		super(props);
+		this.handleDelete = this.handleDelete.bind(this);
+	}
+
+	handleDelete() {
+		this.props.onDelete(this.props.administrative);
+	}
+
 	render() {
 		return (
 			<tr>
-				<td>{this.props.administrative.firstName}</td>
-				<td>{this.props.administrative.lastName}</td>
-				<td>{this.props.administrative.documentNumber}</td>
+				<td>{this.props.administrative.entity.firstName}</td>
+				<td>{this.props.administrative.entity.lastName}</td>
+				<td>{this.props.administrative.entity.documentNumber}</td>
+				<td>{this.props.administrative.entity.description}</td>
+				<td>
+					<UpdateDialog administrative={this.props.administrative}
+								  attributes={this.props.attributes}
+								  onUpdate={this.props.onUpdate}/>
+				</td>
+				<td>
+					<button onClick={this.handleDelete}>Delete</button>
+				</td>
 			</tr>
 		)
 	}
