@@ -4,6 +4,10 @@
 const React = require('react'); // <1>
 const ReactDOM = require('react-dom'); // <2>
 const client = require('./client'); // <3>
+const when = require('when');
+const follow = require('./follow'); // function to hop multiple links by "rel"
+
+const root = '/api';
 // end::vars[]
 
 // tag::app[]
