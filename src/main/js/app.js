@@ -135,6 +135,110 @@ class App extends React.Component { // <1>
 }
 // end::app[]
 
+// tag::create-dialog[]
+class CreateDialog extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleSubmit(e) { // stops the event from bubbling further up the hierarchy
+		e.preventDefault(); // ?? posibbly related with the comment above
+		const newAdministrative = {}; 
+		this.props.attributes.forEach(attribute => {
+			newAdministrative[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim(); // It then uses the same JSON Schema attribute property to find each <input>
+		});
+		this.props.onCreate(newAdministrative); // we invoke a callback to onCreate() for the new administrative record
+
+		// clear out the dialog's inputs
+		this.props.attributes.forEach(attribute => {
+			ReactDOM.findDOMNode(this.refs[attribute]).value = '';
+		});
+
+		// Navigate away from the dialog to hide it.
+		window.location = "#";
+	}
+
+	render() {
+		// "key" is again needed by React to distinguish between multiple child nodes. "placeholder" lets us show the user with field is which.
+		const inputs = this.props.attributes.map(attribute =>
+			<p key={attribute}> 
+				<input type="text" placeholder={attribute} ref={attribute} className="field"/>
+			</p>
+		);
+
+		return ( // That button has an onClick={this.handleSubmit} event handler. This is the React way of registering an event handler.
+			<div>
+				<a href="#createAdministrative">Create</a>
+
+				<div id="createAdministrative" className="modalDialog">
+					<div>
+						<a href="#" title="Close" className="close">X</a>
+
+						<h2>Create new administrative</h2>
+
+						<form>
+							{inputs}
+							<button onClick={this.handleSubmit}>Create</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+}
+
+class UpdateDialog extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleSubmit(e) {
+		e.preventDefault();
+		const updatedAdministrative = {};
+		this.props.attributes.forEach(attribute => {
+			updatedAdministrative[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
+		});
+		this.props.onUpdate(this.props.administrative, updatedAdministrative);
+		window.location = "#";
+	}
+
+	render() {
+		const inputs = this.props.attributes.map(attribute =>
+			<p key={this.props.administrative.entity[attribute]}>
+				<input type="text" placeholder={attribute}
+					   defaultValue={this.props.administrative.entity[attribute]}
+					   ref={attribute} className="field"/>
+			</p>
+		);
+
+		const dialogId = "updateAdmnistrative-" + this.props.administrative.entity._links.self.href;
+
+		return (
+			<div key={this.props.administrative.entity._links.self.href}>
+				<a href={"#" + dialogId}>Update</a>
+				<div id={dialogId} className="modalDialog">
+					<div>
+						<a href="#" title="Close" className="close">X</a>
+
+						<h2>Update an administrative</h2>
+
+						<form>
+							{inputs}
+							<button onClick={this.handleSubmit}>Update</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+};
+
 // tag::administrative-list[]
 class AdministrativeList extends React.Component{
 	render() {
