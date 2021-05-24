@@ -1,6 +1,6 @@
-# incredible, unbelievable, superbly awesome, mediocre app (iu-sama)
+# I can't believe it's Spring!
 
-A Spring app with a React front-end to show off a bit.
+Example CRUD application. Made with Spring Boot and React
 
 ## Description
 
