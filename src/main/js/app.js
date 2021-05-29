@@ -24,6 +24,8 @@ class App extends React.Component { // <1>
 		this.onUpdate = this.onUpdate.bind(this);
 		this.onDelete = this.onDelete.bind(this);
 		this.onNavigate = this.onNavigate.bind(this);
+		this.refreshCurrentPage = this.refreshCurrentPage.bind(this);
+		this.refreshAndGoToLastPage = this.refreshAndGoToLastPage.bind(this);
 	}
 
 	loadFromServer(pageSize) {
@@ -142,9 +144,61 @@ class App extends React.Component { // <1>
 	}
 	// end::update-page-size[]
 
+	// tag::websocket-handlers[]
+	refreshAndGoToLastPage(message) {
+		follow(client, root, [{
+			rel: 'administratives',
+			params: {size: this.state.pageSize}
+		}]).done(response => {
+			if (response.entity._links.last !== undefined) {
+				this.onNavigate(response.entity._links.last.href);
+			} else {
+				this.onNavigate(response.entity._links.self.href);
+			}
+		})
+	}
+	
+	refreshCurrentPage(message) {
+		follow(client, root, [{
+			rel: 'administratives',
+			params: {
+				size: this.state.pageSize,
+				page: this.state.page.number
+			}
+		}]).then(administrativeCollection => {
+			this.links = administrativeCollection.entity._links;
+			this.page = administrativeCollection.entity.page;
+
+			return administrativeCollection.entity._embedded.administratives.map(administrative => {
+				return client({
+					method: 'GET',
+					path: administrative._links.self.href
+				})
+			});
+		}).then(administrativePromises => {
+			return when.all(administrativePromises);
+		}).then(administratives => {
+			this.setState({
+				page: this.page,
+				administratives: administratives,
+				attributes: Object.keys(this.schema.properties),
+				pageSize: this.state.pageSize,
+				links: this.links
+			});
+		});
+	}
+	// end::websocket-handlers[]
+
+	// tag::register-handlers[]
 	componentDidMount() {
 		this.loadFromServer(this.state.pageSize);
+		stompClient.register([
+			{route: '/topic/newAdministrative', callback: this.refreshAndGoToLastPage},
+			{route: '/topic/updateAdministrative', callback: this.refreshCurrentPage},
+			{route: '/topic/deleteAdministrative', callback: this.refreshCurrentPage}
+		]);		
 	}
+	// end::register-handlers[]	
 
 	render() {
 		return (
