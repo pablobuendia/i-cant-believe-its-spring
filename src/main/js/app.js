@@ -1,9 +1,9 @@
 'use strict';
 
 // tag::vars[]
-const React = require('react'); // <1>
-const ReactDOM = require('react-dom'); // <2>
-const client = require('./client'); // <3>
+const React = require('react');
+const ReactDOM = require('react-dom'); 
+const client = require('./client');
 const when = require('when');
 
 const follow = require('./follow'); // function to hop multiple links by "rel"
@@ -14,7 +14,7 @@ const root = '/api';
 // end::vars[]
 
 // tag::app[]
-class App extends React.Component { // <1>
+class App extends React.Component {
 
 	constructor(props) {
 		super(props);
