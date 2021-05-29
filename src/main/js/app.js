@@ -28,6 +28,38 @@ class App extends React.Component { // <1>
 		this.refreshAndGoToLastPage = this.refreshAndGoToLastPage.bind(this);
 	}
 
+	// loadFromServer(pageSize) {
+	// 	follow(client, root, [
+	// 		{rel: 'administratives', params: {size: pageSize}}]
+	// 	).then(administrativeCollection => { // It creates a call to fetch JSON Schema data.
+	// 		return client({
+	// 			method: 'GET',
+	// 			path: administrativeCollection.entity._links.profile.href,
+	// 			headers: {'Accept': 'application/schema+json'}
+	// 		}).then(schema => { 
+	// 			this.schema = schema.entity; // This has an inner then clause to store the metadata and navigational links in the <App/> component.
+	// 			this.links = administrativeCollection.entity._links;
+	// 			return administrativeCollection; // this embedded promise returns the administrativeCollection
+	// 		});
+	// 	}).then(administrativeCollection => { // The second then(administrativeCollection ⇒ …​) clause converts the collection of administratives into an array of GET promises to fetch each individual resource.
+	// 		return administrativeCollection.entity._embedded.administratives.map(administrative =>
+	// 				client({
+	// 					method: 'GET',
+	// 					path: administrative._links.self.href
+	// 				})
+	// 		);
+	// 	}).then(administrativePromises => { // The then(administrativePromises ⇒ …​) clause takes the array of GET promises and merges them into a single promise with when.all()
+	// 		return when.all(administrativePromises); // which is resolved when all the GET promises are resolved.
+	// 	}).done(administratives => { // loadFromServer wraps up with done(administratives ⇒ …​) where the UI state is updated using this amalgamation of data.
+	// 		this.setState({
+	// 			administratives: administratives,
+	// 			attributes: Object.keys(this.schema.properties),
+	// 			pageSize: pageSize,
+	// 			links: this.links
+	// 		});
+	// 	});
+	// }
+
 	loadFromServer(pageSize) {
 		follow(client, root, [
 			{rel: 'administratives', params: {size: pageSize}}]
@@ -42,6 +74,7 @@ class App extends React.Component { // <1>
 				return administrativeCollection; // this embedded promise returns the administrativeCollection
 			});
 		}).then(administrativeCollection => { // The second then(administrativeCollection ⇒ …​) clause converts the collection of administratives into an array of GET promises to fetch each individual resource.
+			this.page = administrativeCollection.entity.page;
 			return administrativeCollection.entity._embedded.administratives.map(administrative =>
 					client({
 						method: 'GET',
@@ -52,6 +85,7 @@ class App extends React.Component { // <1>
 			return when.all(administrativePromises); // which is resolved when all the GET promises are resolved.
 		}).done(administratives => { // loadFromServer wraps up with done(administratives ⇒ …​) where the UI state is updated using this amalgamation of data.
 			this.setState({
+				page: this.page,
 				administratives: administratives,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: pageSize,
@@ -70,15 +104,6 @@ class App extends React.Component { // <1>
 				entity: newAdministrative,
 				headers: {'Content-Type': 'application/json'}
 			})
-		}).then(response => {
-			return follow(client, root, [
-				{rel: 'administratives', params: {'size': this.state.pageSize}}]);
-		}).done(response => {
-			if (typeof response.entity._links.last !== "undefined") {
-				this.onNavigate(response.entity._links.last.href);
-			} else {
-				this.onNavigate(response.entity._links.self.href);
-			}
 		});
 	}
 	// end::create[]
@@ -94,7 +119,7 @@ class App extends React.Component { // <1>
 				'If-Match': administrative.headers.Etag
 			}
 		}).done(response => {
-			this.loadFromServer(this.state.pageSize);
+			/* Let the websocket handler update the state */
 		}, response => {
 			if (response.status.code === 412) {
 				alert('DENIED: Unable to update ' +
@@ -106,9 +131,7 @@ class App extends React.Component { // <1>
 
 	// tag::delete[]
 	onDelete(administrative) {
-		client({method: 'DELETE', path: administrative._links.self.href}).done(response => {
-			this.loadFromServer(this.state.pageSize);
-		});
+		client({method: 'DELETE', path: administrative._links.self.href});
 	}
 	// end::delete[]	
 
@@ -116,6 +139,7 @@ class App extends React.Component { // <1>
 	onNavigate(navUri) {
 		client({method: 'GET', path: navUri}).then(administrativeCollection => {
 			this.links = administrativeCollection.entity._links;
+			this.page = administrativeCollection.entity.page;
 
 			return administrativeCollection.entity._embedded.administratives.map(administrative =>
 					client({
@@ -127,6 +151,7 @@ class App extends React.Component { // <1>
 			return when.all(administrativePromises);
 		}).done(administratives => {
 			this.setState({
+				page: this.page,
 				administratives: administratives,
 				attributes: Object.keys(this.schema.properties),
 				pageSize: this.state.pageSize,
@@ -204,7 +229,8 @@ class App extends React.Component { // <1>
 		return (
 			<div>
 				<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
-				<AdministrativeList administratives={this.state.administratives}
+				<AdministrativeList page={this.state.page}
+							   	administratives={this.state.administratives}
 							  links={this.state.links}
 							  pageSize={this.state.pageSize}
 							  attributes={this.state.attributes}
@@ -371,6 +397,9 @@ class AdministrativeList extends React.Component{
 
 	// tag::administrative-list-render[]
 	render() {
+		const pageInfo = this.props.page.hasOwnProperty("number") ?
+			<h3>Administratives - Page {this.props.page.number + 1} of {this.props.page.totalPages}</h3> : null;
+
 		const administratives = this.props.administratives.map(administrative =>
 			<Administrative key={administrative.entity._links.self.href} administrative={administrative} attributes={this.props.attributes}
 			onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
@@ -392,6 +421,7 @@ class AdministrativeList extends React.Component{
 
 		return (
 			<div>
+				{pageInfo}
 				<input ref="pageSize" defaultValue={this.props.pageSize} onInput={this.handleInput}/>
 				<table>
 					<tbody>
