@@ -157,7 +157,14 @@ class App extends React.Component {
 
 	// tag::delete[]
 	onDelete(administrative) {
-		client({method: 'DELETE', path: administrative._links.self.href});
+		client({method: 'DELETE', path: administrative.entity._links.self.href}
+		).done(response => {/* let the websocket handle updating the UI */},
+		response => {
+			if (response.status.code === 403) {
+				alert('ACCESS DENIED: You are not authorized to delete ' +
+				administrative.entity._links.self.href);
+			}
+		});		
 	}
 	// end::delete[]	
 
