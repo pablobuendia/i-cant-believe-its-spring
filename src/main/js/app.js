@@ -137,15 +137,18 @@ class App extends React.Component {
 
 	// tag::navigate[]
 	onNavigate(navUri) {
-		client({method: 'GET', path: navUri}).then(administrativeCollection => {
+		client({
+			method: 'GET',
+			path: navUri
+		}).then(administrativeCollection => {
 			this.links = administrativeCollection.entity._links;
 			this.page = administrativeCollection.entity.page;
 
 			return administrativeCollection.entity._embedded.administratives.map(administrative =>
-					client({
-						method: 'GET',
-						path: administrative._links.self.href
-					})
+				client({
+					method: 'GET',
+					path: administrative._links.self.href
+				})
 			);
 		}).then(administrativePromises => {
 			return when.all(administrativePromises);
@@ -218,26 +221,27 @@ class App extends React.Component {
 	componentDidMount() {
 		this.loadFromServer(this.state.pageSize);
 		stompClient.register([
-			{route: '/topic/newAdministrative', callback: this.refreshAndGoToLastPage},
-			{route: '/topic/updateAdministrative', callback: this.refreshCurrentPage},
-			{route: '/topic/deleteAdministrative', callback: this.refreshCurrentPage}
-		]);		
+			{ route: '/topic/newAdministrative', callback: this.refreshAndGoToLastPage },
+			{ route: '/topic/updateAdministrative', callback: this.refreshCurrentPage },
+			{ route: '/topic/deleteAdministrative', callback: this.refreshCurrentPage }
+		]);
 	}
 	// end::register-handlers[]	
 
 	render() {
 		return (
 			<div>
-				<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate}/>
+				<CreateDialog attributes={this.state.attributes} onCreate={this.onCreate} />
 				<AdministrativeList page={this.state.page}
-							   	administratives={this.state.administratives}
-							  links={this.state.links}
-							  pageSize={this.state.pageSize}
-							  attributes={this.state.attributes}
-							  onNavigate={this.onNavigate}
-							  onUpdate={this.onUpdate}
-							  onDelete={this.onDelete}
-							  updatePageSize={this.updatePageSize}/>
+					administratives={this.state.administratives}
+					links={this.state.links}
+					pageSize={this.state.pageSize}
+					attributes={this.state.attributes}
+					onNavigate={this.onNavigate}
+					onUpdate={this.onUpdate}
+					onDelete={this.onDelete}
+					updatePageSize={this.updatePageSize}
+					loggedInBoss={this.state.loggedInBoss} />
 			</div>
 		)
 	}
