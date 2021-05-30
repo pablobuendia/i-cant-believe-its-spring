@@ -8,6 +8,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -32,6 +33,9 @@ public class Administrative {
 	@Column
 	private int documentNumber;
 
+	@ManyToOne
+	private Boss boss;
+
 	@Column(length = 100)
 	private String description;
 
@@ -53,7 +57,8 @@ public class Administrative {
 				&& Objects.equals(lastName, administrative.lastName)
 				&& Objects.equals(documentNumber, administrative.documentNumber)
 				&& Objects.equals(description, administrative.description)
-				&& Objects.equals(version, administrative.version);
+				&& Objects.equals(version, administrative.version)
+				&& Objects.equals(boss, administrative.boss);
 	}
 
 	public int getId() {
@@ -104,11 +109,19 @@ public class Administrative {
 		this.version = version;
 	}
 
+	public Boss getBoss() {
+		return boss;
+	}
+
+	public void setBoss(Boss boss) {
+		this.boss = boss;
+	}
+
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(id, firstName, lastName, documentNumber, description,
-				version);
+		return Objects.hash(id, firstName, lastName, documentNumber, description, version,
+				boss);
 	}
 
 	@Override
@@ -116,7 +129,7 @@ public class Administrative {
 		return "Employee{" + "id=" + id + ", firstName='" + firstName + '\''
 				+ ", lastName='" + lastName + '\'' + ", documentNumber='" + documentNumber
 				+ '\'' + ", description='" + description + '\'' + ", version=" + version
-				+ '}';
+				+ ", boss=" + boss + '}';
 	}
 
 }
