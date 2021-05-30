@@ -111,11 +111,10 @@ class App extends React.Component {
 
 	// tag::create[]
 	onCreate(newAdministrative) {
-		const self = this;
-		follow(client, root, ['administratives']).then(administrativeCollection => {
-			return client({
+		follow(client, root, ['administratives']).done(response => {
+			client({
 				method: 'POST',
-				path: administrativeCollection.entity._links.self.href,
+				path: response.entity._links.self.href,
 				entity: newAdministrative,
 				headers: {'Content-Type': 'application/json'}
 			})
