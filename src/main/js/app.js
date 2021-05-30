@@ -18,7 +18,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {administratives: [], attributes: [], page: 1, pageSize: 2, links: {}};
+		this.state = {administratives: [], attributes: [], page: 1, pageSize: 2, links: {}, loggedInBoss: this.props.loggedInBoss};
 		this.updatePageSize = this.updatePageSize.bind(this);
 		this.onCreate = this.onCreate.bind(this);
 		this.onUpdate = this.onUpdate.bind(this);
@@ -69,6 +69,21 @@ class App extends React.Component {
 				path: administrativeCollection.entity._links.profile.href,
 				headers: {'Accept': 'application/schema+json'}
 			}).then(schema => { 
+				// tag::json-schema-filter[]
+				/**
+				 * Filter unneeded JSON Schema properties, like uri references and
+				 * subtypes ($ref).
+				 */
+				 Object.keys(schema.entity.properties).forEach(function (property) {
+					if (schema.entity.properties[property].hasOwnProperty('format') &&
+						schema.entity.properties[property].format === 'uri') {
+						delete schema.entity.properties[property];
+					}
+					else if (schema.entity.properties[property].hasOwnProperty('$ref')) {
+						delete schema.entity.properties[property];
+					}
+				});
+
 				this.schema = schema.entity; // This has an inner then clause to store the metadata and navigational links in the <App/> component.
 				this.links = administrativeCollection.entity._links;
 				return administrativeCollection; // this embedded promise returns the administrativeCollection
@@ -110,22 +125,33 @@ class App extends React.Component {
 
 	// tag::update[]
 	onUpdate(administrative, updatedAdministrative) {
-		client({
-			method: 'PUT',
-			path: administrative.entity._links.self.href,
-			entity: updatedAdministrative,
-			headers: {
-				'Content-Type': 'application/json',
-				'If-Match': administrative.headers.Etag
-			}
-		}).done(response => {
-			/* Let the websocket handler update the state */
-		}, response => {
-			if (response.status.code === 412) {
-				alert('DENIED: Unable to update ' +
-					administrative.entity._links.self.href + '. Your copy is stale.');
-			}
-		});
+		if(administrative.entity.boss.name === this.state.loggedInBoss) {
+			updatedAdministrative["boss"] = administrative.entity.boss;
+			client({
+				method: 'PUT',
+				path: administrative.entity._links.self.href,
+				entity: updatedAdministrative,
+				headers: {
+					'Content-Type': 'application/json',
+					'If-Match': administrative.headers.Etag
+				}
+			}).done(response => {
+				/* Let the websocket handler update the state */
+			}, response => {
+				if (response.status.code === 403) {
+					alert('ACCESS DENIED: You are not authorized to update ' +
+						administrative.entity._links.self.href);
+				}				
+				if (response.status.code === 412) {
+					alert('DENIED: Unable to update ' +
+						administrative.entity._links.self.href + '. Your copy is stale.');
+				}
+			});
+		} else {
+			alert("You are not authorized to update");
+		}
+
+
 	}
 	// end::update[]
 
@@ -331,23 +357,35 @@ class UpdateDialog extends React.Component {
 
 		const dialogId = "updateAdmnistrative-" + this.props.administrative.entity._links.self.href;
 
-		return (
-			<div key={this.props.administrative.entity._links.self.href}>
-				<a href={"#" + dialogId}>Update</a>
-				<div id={dialogId} className="modalDialog">
+		const isBossCorrect = this.props.administrative.entity.boss && this.props.administrative.entity.boss.name == this.props.loggedInBoss;
+
+		if (isBossCorrect === false) {
+			return (
 					<div>
-						<a href="#" title="Close" className="close">X</a>
-
-						<h2>Update an administrative</h2>
-
-						<form>
-							{inputs}
-							<button onClick={this.handleSubmit}>Update</button>
-						</form>
+						<a>Not Your Administrative</a>
+					</div>
+				)
+		} else {
+			return (
+				<div>
+					<a href={"#" + dialogId}>Update</a>
+					<div id={dialogId} className="modalDialog">
+						<div>
+							<a href="#" title="Close" className="close">X</a>
+	
+							<h2>Update an administrative</h2>
+	
+							<form>
+								{inputs}
+								<button onClick={this.handleSubmit}>Update</button>
+							</form>
+						</div>
 					</div>
 				</div>
-			</div>
-		)
+			)
+		}
+
+
 	}
 
 };
@@ -405,8 +443,12 @@ class AdministrativeList extends React.Component{
 			<h3>Administratives - Page {this.props.page.number + 1} of {this.props.page.totalPages}</h3> : null;
 
 		const administratives = this.props.administratives.map(administrative =>
-			<Administrative key={administrative.entity._links.self.href} administrative={administrative} attributes={this.props.attributes}
-			onUpdate={this.props.onUpdate} onDelete={this.props.onDelete}/>
+			<Administrative key={administrative.entity._links.self.href} 
+				administrative={administrative}
+				attributes={this.props.attributes}
+				onUpdate={this.props.onUpdate}
+				onDelete={this.props.onDelete}
+				loggedInBoss={this.props.loggedInBoss} />
 		);
 
 		const navLinks = [];
@@ -434,6 +476,7 @@ class AdministrativeList extends React.Component{
 							<th>Last Name</th>
 							<th>Document Number</th>
 							<th>Description</th>
+							<th>Manager</th>
 							<th></th>
 							<th></th>
 						</tr>
@@ -469,10 +512,12 @@ class Administrative extends React.Component{
 				<td>{this.props.administrative.entity.lastName}</td>
 				<td>{this.props.administrative.entity.documentNumber}</td>
 				<td>{this.props.administrative.entity.description}</td>
+				<td>{this.props.administrative.entity.boss ? this.props.administrative.entity.boss.name : null}</td>
 				<td>
 					<UpdateDialog administrative={this.props.administrative}
 								  attributes={this.props.attributes}
-								  onUpdate={this.props.onUpdate}/>
+								  onUpdate={this.props.onUpdate}
+								  loggedInBoss={this.props.loggedInBoss}/>
 				</td>
 				<td>
 					<button onClick={this.handleDelete}>Delete</button>
@@ -485,6 +530,6 @@ class Administrative extends React.Component{
 
 // tag::render[]
 ReactDOM.render(
-	<App />,
+	<App loggedInBoss={document.getElementById('bossname').innerHTML }/>,
 	document.getElementById('react')
 )
