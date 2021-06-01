@@ -25,10 +25,8 @@ import com.pablo.domain.Administrative;
 @RepositoryEventHandler(Administrative.class) // flags this class to trap events based on Administratives
 public class EventHandler {
 
-	static final String MESSAGE_PREFIX = "/topic";
-
+	private static final String MESSAGE_PREFIX = "/topic";
 	private final SimpMessagingTemplate websocket;
-
 	private final EntityLinks entityLinks;
 
 	@Autowired
