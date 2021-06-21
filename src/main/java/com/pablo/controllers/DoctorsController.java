@@ -24,8 +24,8 @@ public class DoctorsController {
 	}
 
 	@GetMapping
-	public String showDoctors(Model model) {
-		List<Doctor> doctors = this.docService.getAllDoctors();
+	public String findAllDoctors(Model model) {
+		List<Doctor> doctors = this.docService.findAllDoctors();
 		model.addAttribute("doctors", doctors);
 		return "doctors.jsp";
 	}
