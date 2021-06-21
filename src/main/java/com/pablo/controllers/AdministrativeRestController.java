@@ -15,7 +15,7 @@ import com.pablo.domain.Administrative;
 import com.pablo.services.AdministrativeService;
 
 @RestController
-public class AdministrativeController {
+public class AdministrativeRestController {
 
 	@Autowired
 	AdministrativeService administrativesService;
