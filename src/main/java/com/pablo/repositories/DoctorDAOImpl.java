@@ -6,7 +6,6 @@ import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,6 @@ public class DoctorDAOImpl implements DoctorDAO {
 
 	private SessionFactory sessionFactory;
 
-	@Autowired
 	public DoctorDAOImpl(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
@@ -30,6 +28,11 @@ public class DoctorDAOImpl implements DoctorDAO {
 		query.setParameter("location", location);
 		query.setParameter("specialty", specialty);
 		return query.getResultList();
+	}
+
+	@Override
+	public List<Doctor> getAllDoctors() {
+		return null;
 	}
 
 }
