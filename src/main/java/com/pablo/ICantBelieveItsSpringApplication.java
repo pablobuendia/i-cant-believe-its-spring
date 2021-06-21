@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ICantBelieveItsSpring {
+public class ICantBelieveItsSpringApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ICantBelieveItsSpring.class, args);
+		SpringApplication.run(ICantBelieveItsSpringApplication.class, args);
 	}
 
 }
