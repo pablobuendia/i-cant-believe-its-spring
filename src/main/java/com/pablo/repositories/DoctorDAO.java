@@ -8,5 +8,5 @@ public interface DoctorDAO {
 
 	public List<Doctor> findByLocationAndSpecialty(String location, String specialty);
 
-	public List<Doctor> getAllDoctors();
+	public List<Doctor> findAllDoctors();
 }
