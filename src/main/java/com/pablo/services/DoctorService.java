@@ -8,4 +8,6 @@ public interface DoctorService {
 
 	List<Doctor> findByLocationAndSpecialty(String location, String specialtyCode);
 
+	List<Doctor> getAllDoctors();
+
 }

@@ -2,8 +2,8 @@ package com.pablo.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,16 +17,19 @@ import com.pablo.services.DoctorService;
 @RequestMapping("/doctors")
 public class DoctorsController {
 
-	@Autowired
 	DoctorService docService;
 
-	/**
-	 * Search for a list of doctors based on the Location and the specialty
-	 * 
-	 * @param location
-	 * @param specialty
-	 * @return
-	 */
+	public DoctorsController(DoctorService docService) {
+		this.docService = docService;
+	}
+
+	@GetMapping
+	public String showDoctors(Model model) {
+		List<Doctor> doctors = this.docService.getAllDoctors();
+		model.addAttribute("doctors", doctors);
+		return "doctors.jsp";
+	}
+
 	@GetMapping(value = "/searchDoctor", produces = MediaType.APPLICATION_JSON_VALUE)
 	public DoctorList searchDoctor(
 			@RequestParam(value = "location", required = false) String location,
