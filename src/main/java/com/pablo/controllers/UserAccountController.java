@@ -49,22 +49,12 @@ public class UserAccountController {
 		return "login";
 	}
 
-	/**
-	 * Template signup method
-	 * 
-	 * @return
-	 */
 	@GetMapping("/signup")
 	public String signup() {
 		// TODO: Expand this section
 		return "signup";
 	}
 
-	/**
-	 * Template method
-	 * 
-	 * @return
-	 */
 	@GetMapping("/forgotpassword")
 	public String forgotpassword() {
 		// TODO: Expand this section
@@ -119,9 +109,8 @@ public class UserAccountController {
 	}
 
 	/**
-	 * ModelAndView is a container object to hold both Model and View. With ModelAndView
-	 * as a return object, the controller returns the both model and view as a single
-	 * return value.
+	 * ModelAndView is a container object to hold both Model and View. With ModelAndView as a return
+	 * object, the controller returns the both model and view as a single return value.
 	 * 
 	 * @param nickname
 	 * @param emailAddress

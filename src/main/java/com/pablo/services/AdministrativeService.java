@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pablo.domain.Administrative;
@@ -13,33 +12,31 @@ import com.pablo.repositories.AdministrativeRepository;
 @Service
 public class AdministrativeService {
 
-	@Autowired
-	AdministrativeRepository administrativeRepository;
+	private AdministrativeRepository administrativeRepository;
 
-	// getting all administratives record by using the method findaAll() of CrudRepository
-	public List<Administrative> getAllAdministrative() {
+	public AdministrativeService(AdministrativeRepository administrativeRepository) {
+		this.administrativeRepository = administrativeRepository;
+	}
+
+	public List<Administrative> getAll() {
 		List<Administrative> administratives = new ArrayList<>();
 		administrativeRepository.findAll().forEach(administratives::add);
 		return administratives;
 	}
 
-	// getting a specific record by using the method findById() of CrudRepository
-	public Administrative getAdministrativeById(int id) {
+	public Administrative getById(int id) {
 		Optional<Administrative> result = administrativeRepository.findById(id);
 		return result.isPresent() ? result.get() : null;
 	}
 
-	// saving a specific record by using the method save() of CrudRepository
 	public void saveOrUpdate(Administrative administratives) {
 		administrativeRepository.save(administratives);
 	}
 
-	// deleting a specific record by using the method deleteById() of CrudRepository
 	public void delete(int id) {
 		administrativeRepository.deleteById(id);
 	}
 
-	// updating a record
 	public void update(Administrative administratives) {
 		administrativeRepository.save(administratives);
 	}
