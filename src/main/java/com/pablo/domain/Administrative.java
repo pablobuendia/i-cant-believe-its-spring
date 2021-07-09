@@ -24,13 +24,16 @@ public class Administrative {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 50)
 	private String firstName;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 50)
 	private String lastName;
 
-	@Column
+	@Column(nullable = false)
+	private int documentType;
+
+	@Column(nullable = false)
 	private int documentNumber;
 
 	@ManyToOne
@@ -38,6 +41,9 @@ public class Administrative {
 
 	@Column(length = 100)
 	private String description;
+
+	@Column(length = 100)
+	private String phoneNumber;
 
 	@Version
 	private Long version; // It causes a value to be
