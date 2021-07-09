@@ -2,15 +2,15 @@ package com.pablo.controllers;
 
 import java.util.List;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.pablo.domain.Doctor;
 import com.pablo.services.DoctorService;
 
-@RestController
+@Controller
 @RequestMapping("/doctors")
 public class DoctorsController {
 
@@ -24,7 +24,7 @@ public class DoctorsController {
 	public String findAllDoctors(Model model) {
 		List<Doctor> doctors = this.docService.findAllDoctors();
 		model.addAttribute("doctors", doctors);
-		return "doctors.jsp";
+		return "doctors";
 	}
 
 	// @GetMapping(value = "/searchDoctor", produces = MediaType.APPLICATION_JSON_VALUE)
