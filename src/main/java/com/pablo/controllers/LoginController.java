@@ -14,7 +14,7 @@ public class LoginController extends UserAccountController {
 		super(userService);
 	}
 
-	@GetMapping()
+	@GetMapping
 	public String login() {
 		return "login";
 	}

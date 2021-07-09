@@ -19,7 +19,7 @@ public class IndexController {
 						// file
 	}
 
-	@GetMapping("/{nickname}")
+	@GetMapping("/index/{nickname}")
 	public String home(ModelMap model, @PathVariable String nickname) {
 		model.addAttribute("name", nickname);
 		return "index";
