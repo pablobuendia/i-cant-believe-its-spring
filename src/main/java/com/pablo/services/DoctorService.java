@@ -6,7 +6,7 @@ import com.pablo.domain.Doctor;
 
 public interface DoctorService {
 
-	List<Doctor> findByLocationAndSpecialty(String location, String specialtyCode);
+	// List<Doctor> findByLocationAndSpecialty(String location, String specialtyCode);
 
 	List<Doctor> findAllDoctors();
 

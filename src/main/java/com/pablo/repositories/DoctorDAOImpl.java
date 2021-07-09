@@ -17,10 +17,10 @@ public class DoctorDAOImpl implements DoctorDAO {
 		this.doctorRepository = doctorRepository;
 	}
 
-	@Override
-	public List<Doctor> findByLocationAndSpecialty(String location, String specialty) {
-		return doctorRepository.findByLocationAndSpecialty(location, specialty);
-	}
+	// @Override
+	// public List<Doctor> findByLocationAndSpecialty(String location, String specialty) {
+	// return doctorRepository.findByLocationAndSpecialty(location, specialty);
+	// }
 
 	@Override
 	public List<Doctor> findAllDoctors() {

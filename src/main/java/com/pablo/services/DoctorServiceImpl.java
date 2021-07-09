@@ -16,11 +16,11 @@ public class DoctorServiceImpl implements DoctorService {
 		this.doctorDAO = doctorDAO;
 	}
 
-	@Override
-	public List<Doctor> findByLocationAndSpecialty(String location,
-			String specialtyCode) {
-		return doctorDAO.findByLocationAndSpecialty(location, specialtyCode);
-	}
+	// @Override
+	// public List<Doctor> findByLocationAndSpecialty(String location,
+	// String specialtyCode) {
+	// return doctorDAO.findByLocationAndSpecialty(location, specialtyCode);
+	// }
 
 	@Override
 	public List<Doctor> findAllDoctors() {
