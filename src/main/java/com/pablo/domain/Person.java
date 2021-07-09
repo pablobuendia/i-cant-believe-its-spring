@@ -7,8 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "person")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Person {
 
@@ -29,17 +32,21 @@ public class Person {
 	@Column
 	protected String documentNumber;
 
+	@OneToOne
+	private Address address;
+
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", documentNumber=" + documentNumber + ", documentType=" + documentType
-				+ "]";
+				+ ", documentType=" + documentType + ", documentNumber=" + documentNumber
+				+ ", address=" + address + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result
 				+ ((documentNumber == null) ? 0 : documentNumber.hashCode());
 		result = prime * result + ((documentType == null) ? 0 : documentType.hashCode());
@@ -58,6 +65,12 @@ public class Person {
 		if (getClass() != obj.getClass())
 			return false;
 		Person other = (Person) obj;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		}
+		else if (!address.equals(other.address))
+			return false;
 		if (documentNumber == null) {
 			if (other.documentNumber != null)
 				return false;
@@ -129,6 +142,14 @@ public class Person {
 
 	public void setDocumentNumber(String documentNumber) {
 		this.documentNumber = documentNumber;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 }
