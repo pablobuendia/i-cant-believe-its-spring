@@ -1,4 +1,4 @@
-package com.pablo.controllers;
+package com.pablo.examples;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,19 +12,18 @@ import com.pablo.domain.User;
 import com.pablo.helpers.HelloMessage;
 
 @RestController
-@RequestMapping("/rest")
-public class RestControllerExample {
+@RequestMapping("/example/rest")
+public class RestExampleController {
 
-	@GetMapping("/example")
+	@GetMapping("/string-example")
 	public String home() {
 		return "Hello World. This is a health application";
 	}
 
 	/**
-	 * ResponseBody indicates that the value returned by the method will form the body of
-	 * the response. When the value returned is an object, the object is converted into an
-	 * appropiate JSON or XML format by HttpMessageConverters. The form is decided by the
-	 * value of "produces"
+	 * ResponseBody indicates that the value returned by the method will form the body of the response.
+	 * When the value returned is an object, the object is converted into an appropiate JSON or XML
+	 * format by HttpMessageConverters. The form is decided by the value of "produces"
 	 * 
 	 * @param user
 	 * @return
