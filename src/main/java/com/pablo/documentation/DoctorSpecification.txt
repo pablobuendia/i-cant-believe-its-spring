@@ -1,0 +1,23 @@
+This is the Doctor specification document. 
+It tells all of the requirements and declared functionality the Doctor component should have.
+The ones marked with an "x" on the right have already been implemented
+
+A Doctor should be capable of:
+
+-Being created given the valid information
+-Being read given the correct identification		x 
+-Being updated given the correct identification
+-Being deleted given the correct identification		x
+
+-Having a list of appointments
+-Having a schedule of available time
+-accepting new appointments
+
+-Earning either a fixed salary or one based on the number of appointments
+
+-Having a list of patients
+-Issuing a prescription to a patient
+-Creating a new medical history for a patient
+-Updating the medical history of a patient
+
+...And many more
