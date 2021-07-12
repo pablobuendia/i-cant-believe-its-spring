@@ -27,4 +27,19 @@ public class DoctorDAOImpl implements DoctorDAO {
 		return this.doctorRepository.findAll();
 	}
 
+	@Override
+	public Doctor findDoctorById(Long id) {
+		return this.doctorRepository.findById(id);
+	}
+
+	@Override
+	public void deleteDoctorById(Long id) {
+		this.doctorRepository.deleteById(id);
+	}
+
+	@Override
+	public void save(Doctor doctor) {
+		this.save(doctor);
+	}
+
 }
