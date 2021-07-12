@@ -7,22 +7,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.pablo.domain.Doctor;
-import com.pablo.services.DoctorService;
+import com.pablo.dto.DoctorData;
+import com.pablo.facades.DoctorFacade;
 
 @Controller
 @RequestMapping("/doctors")
 public class DoctorsController {
 
-	DoctorService docService;
+	public DoctorFacade doctorFacade;
 
-	public DoctorsController(DoctorService docService) {
-		this.docService = docService;
+	public DoctorsController(DoctorFacade doctorFacade) {
+		this.doctorFacade = doctorFacade;
 	}
 
-	@GetMapping
+	@GetMapping("/findAllDoctors")
 	public String findAllDoctors(Model model) {
-		List<Doctor> doctors = this.docService.findAllDoctors();
+		List<DoctorData> doctors = this.doctorFacade.findAllDoctors();
 		model.addAttribute("doctors", doctors);
 		return "doctors";
 	}
